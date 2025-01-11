@@ -21,8 +21,8 @@ add_executable(test_round_robin_scheduler
     tests/test_circular_queue.c
 )
 
-add_library(unity STATIC libs/unity/unity.c)
-target_include_directories(unity PUBLIC libs/unity)
+add_library(unity STATIC libs/unity/src/unity.c)
+target_include_directories(unity PUBLIC libs/unity/src)
 
 target_link_libraries(test_round_robin_scheduler unity)
 
