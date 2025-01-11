@@ -1,8 +1,9 @@
-#include "circular_queue.h"
-#include "task.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "circular_queue.h"
+#include "task.h"
 
 task *task_create(int task_id, int work_remaining) {
     task *t = (task *)malloc(sizeof(task));

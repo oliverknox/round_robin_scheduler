@@ -1,6 +1,7 @@
-#include "circular_queue.h"
 #include <stdlib.h>
 #include <string.h>
+
+#include "circular_queue.h"
 
 circular_queue *circular_queue_create(size_t size) {
     circular_queue *queue = (circular_queue *)malloc(sizeof(circular_queue));
