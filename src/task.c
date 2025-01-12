@@ -22,22 +22,18 @@ void task_process(task *t, int quantum) {
     }
 
     t->work_remaining -= quantum;
-
-    if (t->work_remaining <= 0) {
-        printf("Task %d has completed.\n", t->task_id);
-    } else {
-        printf("Task %d has %d units of work remaining.\n", t->task_id, t->work_remaining);
-    }
 }
 
 // TODO: task_state_machine should be moved into scheduler.c 
 
-task_state_machine *task_state_machine_create(circular_queue *queue) {
+task_state_machine *task_state_machine_create(circular_queue *queue, void (*on_update)(circular_queue *queue), void (*on_complete)(task *t)) {
     task_state_machine *tsm = (task_state_machine *)malloc(sizeof(task_state_machine));
 
     tsm->queue = queue;
     tsm->current_task = (task *)malloc(sizeof(task));
     tsm->current_task->next_state = READY;
+    tsm->on_update = on_update;
+    tsm->on_complete = on_complete;
 
     return tsm;
 }
@@ -64,6 +60,7 @@ void task_state_machine_process_running(task_state_machine *tsm) {
 void task_state_machine_process_terminated(task_state_machine *tsm) {
     tsm->current_task->next_state = READY;
     tsm->current_task->state = TERMINATED;
+    tsm->on_complete(tsm->current_task);
 }
 
 void task_state_machine_tick(task_state_machine *tsm) {
@@ -89,5 +86,9 @@ void task_state_machine_process(task_state_machine *tsm) {
 
         has_terminated = tsm->current_task->state == TERMINATED;
         has_requeued = tsm->current_task->state == RUNNING && tsm->current_task->next_state == READY;
+    }
+
+    if (tsm->on_update) {
+        tsm->on_update(tsm->queue);
     }
 }
