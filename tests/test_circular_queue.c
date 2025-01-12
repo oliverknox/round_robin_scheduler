@@ -1,7 +1,8 @@
 #include <stdlib.h>
 
+#include <unity.h>
+
 #include "circular_queue.h"
-#include "unity.h"
 
 void setUp(void) {
     // Runs before each test (not needed here but required by Unity)
