@@ -10,11 +10,7 @@ link_libraries(core fort)
 
 include_directories(include fort PUBLIC libs/libfort/lib)
 
-add_executable(round_robin_scheduler 
-    src/main.c 
-    src/circular_queue.c 
-    src/task.c
-)
+add_executable(round_robin_scheduler  src/main.c)
 
 enable_testing()
 
