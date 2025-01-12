@@ -5,9 +5,10 @@ add_library(core STATIC
     src/circular_queue.c 
     src/task.c
 )
-link_libraries(core)
+add_library(fort STATIC libs/libfort/lib/fort.c)
+link_libraries(core fort)
 
-include_directories(include)
+include_directories(include fort PUBLIC libs/libfort/lib)
 
 add_executable(round_robin_scheduler 
     src/main.c 
