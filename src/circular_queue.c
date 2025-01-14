@@ -4,6 +4,10 @@
 #include "circular_queue.h"
 
 circular_queue *circular_queue_create(size_t size) {
+    if (size == 0) {
+        return NULL;
+    }
+
     circular_queue *queue = (circular_queue *)malloc(sizeof(circular_queue));
 
     queue->head = queue->tail = NULL;
@@ -14,6 +18,10 @@ circular_queue *circular_queue_create(size_t size) {
 }
 
 circular_queue_node *circular_queue_node_create(void *data, size_t size) {
+    if (size == 0) {
+        return NULL;
+    }
+
     circular_queue_node *node = (circular_queue_node *)malloc(sizeof(circular_queue_node));
 
     node->data = malloc(size);

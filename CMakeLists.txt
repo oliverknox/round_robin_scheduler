@@ -1,26 +1,13 @@
 cmake_minimum_required(VERSION 3.12)
 project(round_robin_scheduler VERSION 0.1.0 LANGUAGES C)
 
-add_library(core STATIC 
-    src/circular_queue.c 
-    src/task.c
-)
-add_library(fort STATIC libs/libfort/lib/fort.c)
-link_libraries(core fort)
+set(TARGET_GROUP debug CACHE STRING "Group to build")
 
-include_directories(include fort PUBLIC libs/libfort/lib)
+add_subdirectory(src)
+add_subdirectory(include)
+add_subdirectory(lib)
 
-add_executable(round_robin_scheduler  src/main.c)
-
-enable_testing()
-
-add_executable(test_round_robin_scheduler
-    tests/test_circular_queue.c
-)
-
-add_library(unity STATIC libs/unity/src/unity.c)
-target_include_directories(unity PUBLIC libs/unity/src)
-
-target_link_libraries(test_round_robin_scheduler unity)
-
-add_test(NAME RunTests COMMAND test_round_robin_scheduler)
+if(TARGET_GROUP STREQUAL test)
+    include(CTest)
+    add_subdirectory(test)
+endif()

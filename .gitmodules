@@ -1,6 +1,6 @@
-[submodule "libs/unity"]
-	path = libs/unity
+[submodule "lib/unity"]
+	path = lib/unity
 	url = https://github.com/ThrowTheSwitch/Unity.git
-[submodule "libs/libfort"]
-	path = libs/libfort
+[submodule "lib/libfort"]
+	path = lib/libfort
 	url = https://github.com/seleznevae/libfort.git
