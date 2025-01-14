@@ -5,11 +5,11 @@
 #include "circular_queue.h"
 #include "task.h"
 
-task *task_create(int task_id, int work_remaining) {
+task *task_create(int task_id, int total_work) {
     task *t = (task *)malloc(sizeof(task));
 
     t->task_id = task_id;
-    t->work_remaining = work_remaining;
+    t->total_work = t->work_remaining = total_work;
     t->state = READY;
     t->next_state = READY;
     

@@ -11,6 +11,7 @@ typedef enum {
 
 typedef struct {
     int task_id;
+    int total_work;
     int work_remaining;
     task_state state;
     task_state next_state;
@@ -25,7 +26,7 @@ typedef struct {
 } task_state_machine;
 
 
-task *task_create(int task_id, int work_remaining);
+task *task_create(int task_id, int total_work);
 task_state_machine *task_state_machine_create(circular_queue *queue, void (*on_update)(circular_queue *queue), void (*on_complete)(task *t));
 void task_state_machine_process(task_state_machine *tsm);
 

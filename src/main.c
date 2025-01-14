@@ -7,11 +7,11 @@
 #include "task.h"
 
 // TODO: Tidy up into progress_reporter
-const char* sprintf_progress(int percentage, int block_size) {
+const char *sprintf_progress(int percentage, int block_size) {
     int total_blocks = 100 / block_size;
 
-    // string format: "[total_blocks] 100 units left" = total_blocks + 17 chars + 1 null terminator
-    char *progress_str = (char*)malloc(total_blocks + 18);
+    // string format: "[total_blocks] 100%" = total_blocks + 7 chars + 1 null terminator
+    char *progress_str = (char*)malloc(total_blocks + 8);
 
     progress_str[0] = '[';
 
@@ -25,14 +25,14 @@ const char* sprintf_progress(int percentage, int block_size) {
 
     progress_str[total_blocks + 1] = ']';
     progress_str[total_blocks + 2] = ' ';
-    snprintf(progress_str + total_blocks + 3, 15, "%3d units left", percentage);
+    snprintf(progress_str + total_blocks + 3, 5, "%3d%%", percentage);
 
     return progress_str;
 }   
 
 int task_by_task_id_predicate(const void *a, const void *b) {
-    task* at = (task*)a;
-    task* bt = (task*)b;
+    task *at = (task *)a;
+    task *bt = (task *)b;
 
     return at->task_id - bt->task_id;
 }
@@ -59,11 +59,8 @@ void on_state_machine_update(circular_queue *queue) {
     circular_queue_node *current = queue->head;
     int i = 0;
     do {
-        task *t = (task *)current->data;
-        tasks[i] = *t;
-
+        tasks[i] = *(task *)current->data;
         i++;
-
         current = current->next;
     } while (current != queue->head);
 
@@ -73,9 +70,10 @@ void on_state_machine_update(circular_queue *queue) {
         task t = tasks[i];
 
         char task_id_str[12];
-
         sprintf(task_id_str, "%d", t.task_id);
-        const char *progress_str = sprintf_progress(t.work_remaining, 5);
+
+        int progress = (float)t.work_remaining / (float)t.total_work * 100;
+        const char *progress_str = sprintf_progress(progress, 5);
 
         ft_write_ln(table, task_id_str, progress_str);
 
@@ -99,9 +97,9 @@ int main() {
     circular_queue *queue = circular_queue_create(sizeof(task));
 
     task *tasks[] = { 
-        task_create(0, rand() % 100),
-        task_create(1, rand() % 100),
-        task_create(2, rand() % 100) 
+        task_create(0, rand() % 100 + 1),
+        task_create(1, rand() % 100 + 1),
+        task_create(2, rand() % 100 + 1) 
     };
     size_t tasks_len = sizeof(tasks) / sizeof(tasks[0]);
 
